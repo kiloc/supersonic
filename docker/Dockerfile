@@ -1,10 +1,15 @@
-FROM openjdk:21-jdk-bullseye as base
+FROM openjdk:21-jdk-bullseye AS base
 
 # Set the working directory in the container
 WORKDIR /usr/src/app
 
 # Argument to pass in the supersonic version at build time
 ARG SUPERSONIC_VERSION
+
+# Install ps
+RUN apt-get update && \
+    apt-get install -y procps && \
+    rm -rf /var/lib/apt/lists/*
 
 # Copy the supersonic standalone zip file into the container
 COPY assembly/build/supersonic-standalone-${SUPERSONIC_VERSION}.zip .

@@ -107,6 +107,7 @@ export async function getInitialState(): Promise<{
 // }
 
 export function onRouteChange() {
+  console.log('router changed')
   setTimeout(() => {
     let title = window.document.title;
     if (!title.toLowerCase().endsWith(BASE_TITLE.toLowerCase())) {
@@ -120,6 +121,7 @@ export const layout: RunTimeLayoutConfig = (params) => {
   return {
     onMenuHeaderClick: (e) => {
       e.preventDefault();
+      console.log(replaceRoute)
       history.push(replaceRoute);
     },
     logo: (

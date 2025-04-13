@@ -4,12 +4,12 @@ export SUPERSONIC_VERSION=latest
 
 #### Set below DB configs to connect to your own database
 # Supported DB_TYPE:  h2, mysql, postgres
-export S2_DB_TYPE=h2
-export S2_DB_HOST=
-export S2_DB_PORT=
-export S2_DB_USER=
-export S2_DB_PASSWORD=
-export S2_DB_DATABASE=
+export S2_DB_TYPE=postgres
+export S2_DB_HOST=supersonic_postgres
+export S2_DB_PORT=5432
+export S2_DB_USER=supersonic_user
+export S2_DB_PASSWORD=supersonic_password
+export S2_DB_DATABASE=postgres
 
 docker run --rm -it -d \
   --name supersonic_standalone \
