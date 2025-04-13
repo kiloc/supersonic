@@ -25,5 +25,5 @@ if [ -z "$VERSION" ]; then
   exit 1
 fi
 
-# execute_build_script
+execute_build_script
 build_docker_image $VERSION
