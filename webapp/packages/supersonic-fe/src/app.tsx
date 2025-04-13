@@ -121,7 +121,6 @@ export const layout: RunTimeLayoutConfig = (params) => {
   return {
     onMenuHeaderClick: (e) => {
       e.preventDefault();
-      console.log(replaceRoute)
       history.push(replaceRoute);
     },
     logo: (

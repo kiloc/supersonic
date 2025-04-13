@@ -13,6 +13,7 @@ import { ConversationDetailType, MessageItem, MessageTypeEnum, AgentType } from 
 import { queryAgentList } from './service';
 import { useThrottleFn } from 'ahooks';
 import Conversation from './Conversation';
+import ChatIndex from "./ChatIndex";
 import ChatFooter from './ChatFooter';
 import classNames from 'classnames';
 import { cloneDeep, isBoolean } from 'lodash';
@@ -74,6 +75,7 @@ const Chat: ForwardRefRenderFunction<any, Props> = (
 
   const [isSimpleMode, setIsSimpleMode] = useState<boolean>(false);
   const [isDebugMode, setIsDebugMode] = useState<boolean>(true);
+  const [currentNav, setCurentNav] = useState('home');
 
   const conversationRef = useRef<any>();
   const chatFooterRef = useRef<any>();
@@ -117,7 +119,7 @@ const Chat: ForwardRefRenderFunction<any, Props> = (
       updateAgentConfigMode(agent);
     }
     if (!isCopilot) {
-      window.history.replaceState({}, '', `${window.location.pathname}?agentId=${agent?.id}`);
+     // window.history.replaceState({}, '', `${window.location.pathname}?agentId=${agent?.id}`);
     }
   };
 
@@ -382,88 +384,128 @@ const Chat: ForwardRefRenderFunction<any, Props> = (
     [styles.historyVisible]: historyVisible,
   });
 
+  // @ts-ignore
   return (
     <ConfigProvider locale={locale}>
       <div className={chatClass}>
         <div className={styles.chatSection}>
-          {!isMobile && agentList.length > 1 && agentListVisible && (
-            <AgentList
-              agentList={agentList}
-              currentAgent={currentAgent}
-              onSelectAgent={onSelectAgent}
-            />
-          )}
+          {/*{!isMobile && agentList.length > 1 && agentListVisible && (*/}
+          {/*  <AgentList*/}
+          {/*    agentList={agentList}*/}
+          {/*    currentAgent={currentAgent}*/}
+          {/*    onSelectAgent={onSelectAgent}*/}
+          {/*  />*/}
+          {/*)}*/}
+          <div className={styles.sideBarWrapper}>
+            <div className={styles.sideBar}>
+            {/*首页图标 */}
+            <svg width="24" height="24" viewBox="0 0 24 24" onClick={() => setCurentNav('home')} color={currentNav === 'home' ? "var(--chat-blue)" : "#999"}>
+              <path d="M12 3L4 9v12h16V9l-8-6z" fill="currentColor"></path>
+            </svg>
+
+            {/*对话图标 */}
+            <svg width="24" height="24" viewBox="0 0 24 24" onClick={() => {
+              onAddConversation()
+              setCurentNav('chat')
+            }} color={currentNav === 'chat' ? "var(--chat-blue)" : "#999"}>
+              <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" fill="currentColor"></path>
+            </svg>
+
+            {/*历史记录图标 */}
+            <svg width="24" height="24" viewBox="0 0 24 24" onClick={() => setCurentNav('history')} color={currentNav === 'history' ? "var(--chat-blue)" : "#999"}>
+              <path
+                  d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.25 2.52.77-1.28-3.52-2.09V8z"
+                  fill="currentColor"></path>
+            </svg>
+
+            {/*文档图标 */}
+            <svg width="24" height="24" viewBox="0 0 24 24" onClick={() => setCurentNav('col')} color={currentNav === 'col' ? "var(--chat-blue)" : "#999"}>
+              <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm-1 7V3.5L18.5 9H13z"
+                    fill="currentColor"></path>
+            </svg>
+
+            {/*用户图标 */}
+            <svg width="24" height="24" viewBox="0 0 24 24" onClick={() => setCurentNav('user')} color={"#9864ed"}>
+              <path
+                  d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+                  fill="currentColor"></path>
+            </svg>
+          </div>
+          </div>
           <div className={styles.chatApp}>
-            {currentConversation && (
-              <div className={styles.chatBody}>
-                <div className={styles.chatContent}>
-                  {currentAgent && !isMobile && !noInput && (
-                    <div className={styles.chatHeader}>
-                      <Row style={{ width: '100%' }}>
-                        <Col flex="1 1 200px">
-                          <Space>
-                            <div className={styles.chatHeaderTitle}>{currentAgent.name}</div>
-                            <div className={styles.chatHeaderTip}>{currentAgent.description}</div>
-                            <Tooltip title="精简模式下，问答结果将以文本形式输出">
-                              <Switch
-                                key={currentAgent.id}
-                                style={{ position: 'relative', top: -1 }}
-                                size="small"
-                                value={isSimpleMode}
-                                checkedChildren="精简模式"
-                                unCheckedChildren="精简模式"
-                                onChange={checked => {
-                                  setIsSimpleMode(checked);
-                                }}
-                              />
-                            </Tooltip>
-                          </Space>
-                        </Col>
-                        <Col flex="0 1 118px"></Col>
-                      </Row>
-                    </div>
-                  )}
-                  <MessageContainer
-                    id="messageContainer"
-                    isSimpleMode={isSimpleMode}
-                    isDebugMode={isDebugMode}
-                    messageList={messageList}
-                    chatId={currentConversation?.chatId}
-                    historyVisible={historyVisible}
-                    currentAgent={currentAgent}
-                    chatVisible={chatVisible}
-                    isDeveloper={isDeveloper}
-                    integrateSystem={integrateSystem}
-                    onMsgDataLoaded={onMsgDataLoaded}
-                    onSendMsg={onSendMsg}
-                  />
-                  {!noInput && (
-                    <ChatFooter
-                      inputMsg={inputMsg}
-                      chatId={currentConversation?.chatId}
-                      agentList={agentList}
-                      currentAgent={currentAgent}
-                      onToggleHistoryVisible={onToggleHistoryVisible}
-                      onInputMsgChange={onInputMsgChange}
-                      onSendMsg={sendMsg}
-                      onAddConversation={onAddConversation}
-                      onSelectAgent={onSelectAgent}
-                      onOpenAgents={() => {
-                        if (isMobile) {
-                          setMobileAgentsVisible(true);
-                        } else {
-                          setAgentListVisible(!agentListVisible);
-                        }
-                      }}
-                      onOpenShowcase={() => {
-                        setShowCaseVisible(!showCaseVisible);
-                      }}
-                      ref={chatFooterRef}
+            {currentConversation && currentNav === 'chat' && (
+                <div className={styles.chatBody}>
+                  <div className={styles.chatContent}>
+                    {currentAgent && !isMobile && !noInput && (
+                        <div className={styles.chatHeader}>
+                          <Row style={{width: '100%'}}>
+                            <Col flex="1 1 200px">
+                              <Space>
+                                <div className={styles.chatHeaderTitle}>{currentAgent.name}</div>
+                                <div className={styles.chatHeaderTip}>{currentAgent.description}</div>
+                                <Tooltip title="精简模式下，问答结果将以文本形式输出">
+                                  <Switch
+                                      key={currentAgent.id}
+                                      style={{position: 'relative', top: -1}}
+                                      size="small"
+                                      value={isSimpleMode}
+                                      checkedChildren="精简模式"
+                                      unCheckedChildren="精简模式"
+                                      onChange={checked => {
+                                        setIsSimpleMode(checked);
+                                      }}
+                                  />
+                                </Tooltip>
+                              </Space>
+                            </Col>
+                            <Col flex="0 1 118px"></Col>
+                          </Row>
+                        </div>
+                    )}
+                    <MessageContainer
+                        id="messageContainer"
+                        isSimpleMode={isSimpleMode}
+                        isDebugMode={isDebugMode}
+                        messageList={messageList}
+                        chatId={currentConversation?.chatId}
+                        historyVisible={historyVisible}
+                        currentAgent={currentAgent}
+                        chatVisible={chatVisible}
+                        isDeveloper={isDeveloper}
+                        integrateSystem={integrateSystem}
+                        onMsgDataLoaded={onMsgDataLoaded}
+                        onSendMsg={onSendMsg}
                     />
-                  )}
+                    {!noInput && (
+                        <ChatFooter
+                            inputMsg={inputMsg}
+                            chatId={currentConversation?.chatId}
+                            agentList={agentList}
+                            currentAgent={currentAgent}
+                            onToggleHistoryVisible={onToggleHistoryVisible}
+                            onInputMsgChange={onInputMsgChange}
+                            onSendMsg={sendMsg}
+                            onAddConversation={onAddConversation}
+                            onSelectAgent={onSelectAgent}
+                            onOpenAgents={() => {
+                              if (isMobile) {
+                                setMobileAgentsVisible(true);
+                              } else {
+                                setAgentListVisible(!agentListVisible);
+                              }
+                            }}
+                            onOpenShowcase={() => {
+                              setShowCaseVisible(!showCaseVisible);
+                            }}
+                            ref={chatFooterRef}
+                        />
+                    )}
+                  </div>
                 </div>
-              </div>
             )}
+            {
+                currentNav === 'home' && <ChatIndex agentList={agentList}/>
+            }
           </div>
           <Conversation
             currentAgent={currentAgent}

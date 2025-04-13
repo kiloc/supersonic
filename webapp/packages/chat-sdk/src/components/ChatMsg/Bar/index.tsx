@@ -175,6 +175,13 @@ const BarChart: React.FC<Props> = ({
     }
   }, [triggerResize]);
 
+  const { downloadChartAsImage } = useExportByEcharts({
+    instanceRef,
+    question,
+  });
+
+  const { register } = useContext(ChartItemContext);
+
   if (metricColumn && !metricColumn?.authorized) {
     return (
       <NoPermissionChart
@@ -186,13 +193,6 @@ const BarChart: React.FC<Props> = ({
   }
 
   const prefixCls = `${PREFIX_CLS}-bar`;
-
-  const { downloadChartAsImage } = useExportByEcharts({
-    instanceRef,
-    question,
-  });
-
-  const { register } = useContext(ChartItemContext);
 
   register('downloadChartAsImage', downloadChartAsImage);
 

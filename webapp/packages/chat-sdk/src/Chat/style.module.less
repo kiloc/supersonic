@@ -1,8 +1,9 @@
 .chat {
   height: 100%;
   overflow: hidden;
-  background: linear-gradient(180deg, rgba(23, 74, 228, 0) 29.44%, rgba(23, 74, 228, 0.06) 100%),
-    linear-gradient(90deg, #f3f3f7 0%, #f3f3f7 20%, #ebf0f9 60%, #f3f3f7 80%, #f3f3f7 100%);
+  //background: linear-gradient(180deg, rgba(23, 74, 228, 0) 29.44%, rgba(23, 74, 228, 0.06) 100%),
+  //  linear-gradient(90deg, #f3f3f7 0%, #f3f3f7 20%, #ebf0f9 60%, #f3f3f7 80%, #f3f3f7 100%);
+  background: linear-gradient(180deg, #E6F0FF 0%, #FFFFFF 100%);
 
   .chatSection {
     display: flex;
@@ -16,6 +17,7 @@
       flex-direction: column;
       height: 100%;
       color: rgba(0, 0, 0, 0.87);
+      background: #f1f0ff;
 
       .chatBody {
         display: flex;
@@ -57,6 +59,27 @@
           }
         }
       }
+    }
+  }
+  .sideBarWrapper {
+    height: 100vh;
+    padding-top: 120px;
+    //display: flex;
+    //align-items: center;
+  }
+  .sideBar {
+    padding: 40px 0;
+    margin: 0 50px 0 50px;
+    width: 60px;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    svg {
+      cursor: pointer;
     }
   }
 
