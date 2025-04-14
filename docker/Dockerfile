@@ -6,11 +6,6 @@ WORKDIR /usr/src/app
 # Argument to pass in the supersonic version at build time
 ARG SUPERSONIC_VERSION
 
-# Install ps
-RUN apt-get update && \
-    apt-get install -y procps && \
-    rm -rf /var/lib/apt/lists/*
-
 # Copy the supersonic standalone zip file into the container
 COPY assembly/build/supersonic-standalone-${SUPERSONIC_VERSION}.zip .
 
@@ -25,6 +20,11 @@ WORKDIR /usr/src/app
 
 # Argument to pass in the supersonic version at build time
 ARG SUPERSONIC_VERSION
+
+# Install ps
+RUN apt-get update && \
+    apt-get install -y procps && \
+    rm -rf /var/lib/apt/lists/*
 
 # Copy the supersonic standalone folder into the container
 COPY --from=base /usr/src/app/supersonic-standalone-${SUPERSONIC_VERSION} ./supersonic-standalone-${SUPERSONIC_VERSION}
