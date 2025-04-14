@@ -4,14 +4,14 @@ module.exports = function (app) {
   app.use(
     '/api',
     createProxyMiddleware({
-      target: 'http://localhost:9090',
+      target: 'http://localhost:9099',
       changeOrigin: true,
     })
   );
   app.use(
     '/openapi',
     createProxyMiddleware({
-      target: 'http://localhost:9090',
+      target: 'http://localhost:9099',
       changeOrigin: true,
     })
   );
