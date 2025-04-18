@@ -126,7 +126,6 @@ const ROUTES = [
       },
     ],
   },
-
   {
     path: '/metric',
     name: 'metric',
@@ -185,7 +184,6 @@ const ROUTES = [
       },
     ],
   },
-
   {
     path: '/login',
     name: 'login',
@@ -213,7 +211,7 @@ const ROUTES = [
   },
   {
     path: '/',
-    redirect: '/model',
+    redirect: '/chat',
   },
   {
     path: '/401',

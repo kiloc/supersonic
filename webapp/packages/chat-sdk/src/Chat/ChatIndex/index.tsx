@@ -6,8 +6,7 @@ type Props = {
     agentList: AgentType[];
 }
 
-const ChatIndex: ForwardRefRenderFunction<any, Props> = ({agentList}) => {
-    console.log(agentList)
+const ChatIndex: ForwardRefRenderFunction<any, Props> = ({agentList}, ref) => {
     return <main className={styles.mainContent}>
         <header className={styles.mainHeader}>
             <div className={styles.logoContainer}>

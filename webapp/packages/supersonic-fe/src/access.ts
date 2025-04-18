@@ -5,6 +5,7 @@ export default function access(params) {
     return {};
   }
   const { authCodes } = params;
+  // return {SYSTEM_ADMIN: true}
   return Object.keys(ROUTE_AUTH_CODES).reduce((result, key) => {
     const data = { ...result };
     const code = ROUTE_AUTH_CODES[key];
