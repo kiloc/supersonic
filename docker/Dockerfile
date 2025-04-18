@@ -10,7 +10,7 @@ ARG SUPERSONIC_VERSION
 COPY assembly/build/supersonic-standalone-${SUPERSONIC_VERSION}.zip .
 
 # Unzip the supersonic standalone zip
-RUN unzip supersonic-standalone-${SUPERSONIC_VERSION}.zip && \
+RUN unzip supersonic-standalone-${SUPERSONIC_VERSION}.zip || true && \
     rm supersonic-standalone-${SUPERSONIC_VERSION}.zip
 
 FROM openjdk:21-slim
@@ -23,7 +23,7 @@ ARG SUPERSONIC_VERSION
 
 # Install ps
 RUN apt-get update && \
-    apt-get install -y procps && \
+    apt-get install -y procps dos2unix && \
     rm -rf /var/lib/apt/lists/*
 
 # Copy the supersonic standalone folder into the container
@@ -34,6 +34,8 @@ RUN ln -s /usr/src/app/supersonic-standalone-${SUPERSONIC_VERSION} /usr/src/app/
 
 # Set the working directory to the supersonic installation directory
 WORKDIR /usr/src/app/supersonic-standalone-${SUPERSONIC_VERSION}
+
+RUN find ./ -type f -name "*.sh" -exec dos2unix {} \;
 
 # Expose the default port
 EXPOSE 9080

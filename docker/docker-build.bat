@@ -2,14 +2,14 @@
 setlocal
 
 REM Function to execute the build script
-:execute_build_script
-echo Executing build script: assembly\bin\supersonic-build.bat
-call assembly\bin\supersonic-build.bat
-if %errorlevel% neq 0 (
-    echo Build script failed. Exiting.
-    exit /b 1
-)
-goto :eof
+REM :execute_build_script
+REM echo Executing build script: assembly\bin\supersonic-build.bat
+REM call assembly\bin\supersonic-build.bat
+REM if %errorlevel% neq 0 (
+REM    echo Build script failed. Exiting.
+REM    exit /b 1
+REM )
+REM goto :eof
 
 REM Function to build the Docker image
 :build_docker_image
@@ -30,7 +30,7 @@ if "%VERSION%"=="" (
     exit /b 1
 )
 
-call :execute_build_script
+#call :execute_build_script
 call :build_docker_image %VERSION%
 
 endlocal
